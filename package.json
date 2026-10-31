@@ -1,0 +1,20 @@
+{
+  "name": "climasmart-chile-web",
+  "version": "1.0.0",
+  "description": "Sitio web interactivo ClimaSmart Chile - Instalación, Mantención Spa del Aire y Automatización Smart Wi-Fi",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js --open"
+  },
+  "keywords": [
+    "climasmart",
+    "chile",
+    "aire-acondicionado",
+    "smart-wifi",
+    "climatizacion"
+  ],
+  "author": "ClimaSmart Chile",
+  "license": "MIT"
+}
+

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClimaSmart Chile | Instalación, Spa del Aire y Convierte tu Aire Antiguo en Smart Wi-Fi</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="#" class="logo">❄️ Clima<span>Smart</span> Chile</a>
+    <ul class="nav-links">
+      <li><a href="#sin-tecnicismos">En Simple</a></li>
+      <li><a href="#servicios">Servicios y Packs</a></li>
+      <li><a href="#aire-antiguo-smart">Vuelve Smart tu Aire Antiguo</a></li>
+      <li><a href="#calculadoras">Cotizador Online</a></li>
+      <li><a href="#comparativa">Por qué elegirnos</a></li>
+    </ul>
+    <a href="#calculadoras" class="btn-nav">Cotizar en 30 seg</a>
+  </nav>
+
+  <!-- HERO SECTION CON SIMULADOR INTERACTIVO -->
+  <header class="hero">
+    <div>
+      <span class="badge-hero">🇨🇱 Servicio Certificado en Chile • Cero Letra Chica</span>
+      <h1>Tu Aire Acondicionado Como Nuevo y <span>Controlado desde tu Celular</span></h1>
+      <p>
+        Olvídate de los técnicos que hablan en difícil, ensucian tu pared o solo pasan un paño húmedo. 
+        Realizamos <strong>Instalaciones Cero Polvo</strong>, <strong>Hidro-Lavado Profundo</strong> y convertimos tu 
+        <strong>aire acondicionado antiguo en Smart Wi-Fi en 20 minutos</strong> sin cambiarlo.
+      </p>
+      <div class="hero-buttons">
+        <a href="#calculadoras" class="btn-primary">⚡ Cotizar Mi Servicio Ahora</a>
+        <a href="#aire-antiguo-smart" class="btn-secondary">📱 ¿Tienes un Aire Antiguo sin Wi-Fi?</a>
+      </div>
+    </div>
+
+    <!-- Simulador Interactivo de App Smart -->
+    <div>
+      <div class="phone-mockup">
+        <div class="phone-header">
+          <span>App ClimaSmart Wi-Fi</span>
+          <span>🔋 98%</span>
+        </div>
+        <div id="acScreen" class="ac-screen">
+          <div style="font-size:0.8rem; opacity:0.9;">Aire Antiguo Modernizado (Living)</div>
+          <div id="acTemp" class="ac-temp-display">21 °C</div>
+          <div id="acMode" style="font-weight:700; margin-bottom:4px;">Modo: Frío ❄️</div>
+          <div id="acStatus" style="font-size:0.78rem; background:rgba(0,0,0,0.25); padding:4px 8px; border-radius:99px;">
+            ⚡ Ahorro Nocturno Activo (-30% Luz)
+          </div>
+        </div>
+        <div style="font-size:0.78rem; text-align:center; color:#cbd5e1; margin-bottom:8px;">
+          👇 ¡Pruébalo! Así manejarás tu aire antiguo desde el celular:
+        </div>
+        <div class="ac-controls">
+          <button class="ac-btn" onclick="changeTemp(-1)">- Bajar T°</button>
+          <button id="btnPower" class="ac-btn power active" onclick="togglePower()">Apagar</button>
+          <button class="ac-btn" onclick="changeTemp(1)">+ Subir T°</button>
+        </div>
+        <button class="ac-btn" style="width:100%;" onclick="toggleMode()">🔄 Cambiar Frío / Calor</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECCIÓN 1: DICCIONARIO CERO TECNICISMOS -->
+  <section id="sin-tecnicismos">
+    <div class="section-header">
+      <h2>Hablamos en Tu Idioma ("Cero Tecnicismos")</h2>
+      <p>La competencia en Chile usa palabras complicadas para justificar cobros sorpresa. Nosotros te explicamos exactamente qué hacemos y cómo beneficia a tu bolsillo y salud.</p>
+    </div>
+
+    <div class="translator-grid">
+      <div class="trans-card">
+        <div class="trans-jargon">Competencia: "Barrido y vacío a 500 micrones"</div>
+        <div class="trans-simple">✅ Nosotros: Extracción total de humedad</div>
+        <div class="trans-benefit">Sacamos todo el aire húmedo de los tubos de cobre con medidor digital para que tu equipo enfríe al 100% y gaste hasta 25% menos de luz.</div>
+      </div>
+
+      <div class="trans-card">
+        <div class="trans-jargon">Competencia: "Lavado de serpentín y turbina"</div>
+        <div class="trans-simple">✅ Nosotros: Spa del Aire con Carpa Impermeable</div>
+        <div class="trans-benefit">No limpiamos solo la rejilla plástica. Lavamos a presión el rodillo interno sacando todo el hongo negro y mal olor sin caer ni una gota en tu pared.</div>
+      </div>
+
+      <div class="trans-card">
+        <div class="trans-jargon">Competencia: "Transmisor IR IEEE 802.11 + NTC"</div>
+        <div class="trans-simple">✅ Nosotros: Cerebro Smart Wi-Fi para tu Aire Antiguo</div>
+        <div class="trans-benefit">Un pequeño dispositivo elegante que conecta tu aire de hace años a tu celular, Alexa y Google en 20 minutos, ahorrándote $500.000 en un equipo nuevo.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2: APARTADO ESTRELLA - VUELVE INTELIGENTE TU AIRE ANTIGUO -->
+  <section id="aire-antiguo-smart" style="background:#e0f2f1;">
+    <div class="section-header">
+      <span style="background:#00695c; color:white; padding:4px 12px; border-radius:99px; font-size:0.85rem; font-weight:700;">SERVICIO EXCLUSIVO EN CHILE</span>
+      <h2 style="margin-top:10px;">¿Tu Aire Acondicionado es Antiguo? ¡No lo cambies, vuélvelo Smart!</h2>
+      <p>Si tu aire actual enfría y calienta bien con su control remoto normal, en <strong>20 minutos y sin romper ni desarmar nada</strong> lo dejamos conectado al Wi-Fi de tu casa.</p>
+    </div>
+
+    <div class="grid-3">
+      <!-- Plan Smart 1 -->
+      <div class="card">
+        <div>
+          <h3>1. Smart Básico (Control Total)</h3>
+          <p style="color:var(--gray-text); font-size:0.9rem; margin-top:4px;">Ideal para no volver a dudar si dejaste el aire prendido.</p>
+          <div class="price-tag">$29.990 <small>($19.990 junto a mantención)</small></div>
+          <ul class="feature-list">
+            <li>✔️ <strong>Prende y apaga desde cualquier lugar:</strong> Manéjalo desde el metro, la micro o la oficina.</li>
+            <li>✔️ <strong>App en español súper simple:</strong> Configurada en los celulares de toda tu familia.</li>
+            <li>✔️ <strong>Compatible con el 99% de marcas en Chile:</strong> Anwo, Kendal, Midea, Clark, LG, Samsung, Khöne, etc.</li>
+          </ul>
+        </div>
+        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Elegir Smart Básico</a>
+      </div>
+
+      <!-- Plan Smart 2 -->
+      <div class="card popular">
+        <span class="badge-popular">⭐ EL FAVORITO EN CHILE</span>
+        <div>
+          <h3>2. Smart Clima Pro (Termostato Real + Voz)</h3>
+          <p style="color:var(--gray-text); font-size:0.9rem; margin-top:4px;">Control por voz y temperatura perfecta toda la noche.</p>
+          <div class="price-tag">$44.990 <small>($30.000 junto a mantención)</small></div>
+          <ul class="feature-list">
+            <li>✔️ <strong>Pantalla LED elegante:</strong> Muestra la temperatura y humedad real de tu pieza en vivo.</li>
+            <li>✔️ <strong>Control por Voz:</strong> Dices <em>"Alexa, pon el aire a 21 grados"</em> o <em>"Ok Google, apaga el aire"</em>.</li>
+            <li>✔️ <strong>Modo Sueño y Mascota Segura:</strong> Se apaga solo a las 3:00 AM o se enciende solo si tu departamento supera los 27°C en verano.</li>
+          </ul>
+        </div>
+        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Elegir Smart Clima Pro</a>
+      </div>
+
+      <!-- Plan Smart 3 -->
+      <div class="card">
+        <div>
+          <h3>3. Smart Ahorro Máximo (Luz CLP + Ventana)</h3>
+          <p style="color:var(--gray-text); font-size:0.9rem; margin-top:4px;">Control total del gasto en pesos chilenos en tu boleta de luz.</p>
+          <div class="price-tag">$69.990 <small>($54.990 junto a mantención)</small></div>
+          <ul class="feature-list">
+            <li>✔️ <strong>Incluye todo el Plan Smart Clima Pro.</strong></li>
+            <li>✔️ <strong>Medidor de Consumo en Pesos ($ CLP):</strong> Mira en tu celular cuántos pesos exactos ha gastado tu aire en el mes.</li>
+            <li>✔️ <strong>Sensor Inteligente de Ventana Abierta:</strong> Si alguien abre la ventana más de 3 minutos, el aire se apaga solo para no botar plata.</li>
+          </ul>
+        </div>
+        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Elegir Ahorro Máximo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: SERVICIOS DE MANTENCIÓN E INSTALACIÓN -->
+  <section id="servicios">
+    <div class="section-header">
+      <h2>Nuestros Servicios y Packs Todo Incluido</h2>
+      <p>Precios transparentes publicados en pantalla. Incluye reporte fotográfico "Semáforo de Salud" (Verde, Amarillo, Rojo) del Antes y Después directo a tu WhatsApp.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div>
+          <h3>🚿 Mantención "Spa del Aire"</h3>
+          <p style="color:var(--gray-text); font-size:0.9rem;">Hidro-lavado profundo con carpa recolectora impermeable.</p>
+          <div class="price-tag">$59.990 <small>/ 1 equipo ($44.990 c/u por 2 o más)</small></div>
+          <ul class="feature-list">
+            <li>✔️ <strong>Cero manchas en tu pared:</strong> Usamos funda impermeable sellada.</li>
+            <li>✔️ <strong>Lavado a presión + Vapor:</strong> Eliminamos barro negro y hongos de la turbina interna.</li>
+            <li>✔️ <strong>Sanitización grado médico:</strong> Adiós alergias y olor a humedad.</li>
+            <li>✔️ <strong>Destape de desagüe y chequeo eléctrico:</strong> Garantía Cero Goteo.</li>
+          </ul>
+        </div>
+        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Agendar Spa del Aire</a>
+      </div>
+
+      <div class="card popular">
+        <span class="badge-popular">🔥 PACK ROMPE-MERCADO (AHORRAS $15.000)</span>
+        <div>
+          <h3>🚀 Pack Renueva + Smart Pro</h3>
+          <p style="color:var(--gray-text); font-size:0.9rem;">Tu aire limpio como nuevo + Control inteligente Wi-Fi en la misma visita.</p>
+          <div class="price-tag">$89.990 <small>/ Todo incluido instalado</small></div>
+          <ul class="feature-list">
+            <li>✔️ <strong>Mantención Profunda "Spa del Aire" completa.</strong></li>
+            <li>✔️ <strong>Kit Smart Clima Pro (Pantalla LED + Sensor T°/Humedad) incluido.</strong></li>
+            <li>✔️ <strong>Configuración lista en tus celulares + Alexa/Google.</strong></li>
+            <li>✔️ <strong>Automatización "Llegando a Casa" y "Ahorro Nocturno" activadas.</strong></li>
+          </ul>
+        </div>
+        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Quiero el Pack Estrella</a>
+      </div>
+
+      <div class="card">
+        <div>
+          <h3>🛠️ Instalación Certificada "Cero Polvo"</h3>
+          <p style="color:var(--gray-text); font-size:0.9rem;">Para equipos Split Muro nuevos de 9.000 a 12.000 BTU.</p>
+          <div class="price-tag">$135.000 <small>/ Llave en mano</small></div>
+          <ul class="feature-list">
+            <li>✔️ <strong>Perforación con Colector y Aspiradora:</strong> No ensuciamos tus muebles ni pisos.</li>
+            <li>✔️ <strong>Cañería 100% Cobre (hasta 3 metros) + Canaleta estética PVC.</strong></li>
+            <li>✔️ <strong>Bomba de Vacío Digital:</strong> Protege el motor y ahorra 25% de energía.</li>
+            <li>✔️ <strong>6 Meses de Garantía directa por escrito.</strong></li>
+          </ul>
+        </div>
+        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Agendar Instalación</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 4: CALCULADORAS INTERACTIVAS (BTU + COTIZADOR WHATSAPP) -->
+  <section id="calculadoras" style="background:#f1f5f9;">
+    <div class="section-header">
+      <h2>Herramientas Interactivas para el Cliente</h2>
+      <p>Calcula qué capacidad necesita tu pieza sin tecnicismos o arma tu presupuesto exacto en segundos.</p>
+    </div>
+
+    <div class="calc-wrapper">
+      <!-- Calculadora 1: BTU en Simple -->
+      <div class="calc-box">
+        <h3 style="margin-bottom:0.5rem;">📏 1. ¿Qué Aire Necesito? (Calculadora Simple)</h3>
+        <p style="font-size:0.9rem; color:var(--gray-text); margin-bottom:1.2rem;">No necesitas saber qué es un BTU. Dinos cómo es tu pieza y te recomendamos el equipo exacto.</p>
+
+        <div class="form-group">
+          <label>Tamaño aproximado de la habitación (m²):</label>
+          <input type="number" id="inputM2" class="form-control" value="18" min="5" max="100" oninput="calcularBTU()" />
+          <small style="color:var(--gray-text);">Ej: Un dormitorio normal mide entre 12 y 18 m². Un living mide entre 22 y 35 m².</small>
+        </div>
+
+        <div class="form-group">
+          <label>¿Cuánto sol recibe en la tarde?</label>
+          <select id="selectSol" class="form-control" onchange="calcularBTU()">
+            <option value="normal">Sol normal o sombra (Oriente / Sur)</option>
+            <option value="mucho">Mucho sol directo en la tarde (Poniente / Norte o último piso)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de espacio:</label>
+          <select id="selectEspacio" class="form-control" onchange="calcularBTU()">
+            <option value="dormitorio">Dormitorio o Escritorio cerrado</option>
+            <option value="living_cocina">Living-Comedor o con Cocina Americana abierta</option>
+          </select>
+        </div>
+
+        <div id="resBTU" class="result-banner"></div>
+      </div>
+
+      <!-- Calculadora 2: Cotizador Directo a WhatsApp -->
+      <div class="calc-box">
+        <h3 style="margin-bottom:0.5rem;">💬 2. Cotizador Instantáneo Sin Sorpresas</h3>
+        <p style="font-size:0.9rem; color:var(--gray-text); margin-bottom:1.2rem;">Arma tu servicio a medida y envíanos tu reserva lista por WhatsApp.</p>
+
+        <div class="form-group">
+          <label>¿Qué servicio necesitas?</label>
+          <select id="cotServicio" class="form-control" onchange="actualizarCotizacion()">
+            <option value="mantencion">Mantención Profunda "Spa del Aire" ($59.990 / 2x $44.990 c/u)</option>
+            <option value="solo_smart">Solo volver Smart Wi-Fi mi Aire Antiguo</option>
+            <option value="instalacion_9_12">Instalación Certificada 9.000 - 12.000 BTU ($135.000)</option>
+            <option value="instalacion_18_24">Instalación Certificada 18.000 - 24.000 BTU ($175.000)</option>
+          </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+          <div class="form-group">
+            <label>Cantidad de Equipos:</label>
+            <input type="number" id="cotCantidad" class="form-control" value="1" min="1" max="10" oninput="actualizarCotizacion()" />
+          </div>
+          <div class="form-group">
+            <label>Marca de tu Aire:</label>
+            <select id="cotMarca" class="form-control" onchange="actualizarCotizacion()">
+              <option value="Anwo / Kendal / Midea">Anwo / Kendal / Midea</option>
+              <option value="Samsung / LG">Samsung / LG</option>
+              <option value="Clark / Hisense / Khöne">Clark / Hisense / Khöne</option>
+              <option value="Otra Marca / No sé">Otra Marca / No estoy seguro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>¿Agregamos el Kit para volver Inteligente tu Aire Antiguo?</label>
+          <select id="cotSmart" class="form-control" onchange="actualizarCotizacion()">
+            <option value="pro" selected>⭐ Sí, Kit Smart Clima Pro (Pantalla T° + Alexa/Google) [Precio Pack]</option>
+            <option value="basico">Sí, Kit Smart Básico (Control desde el Celular)</option>
+            <option value="ahorro">Sí, Kit Smart Ahorro Máximo (Medidor de Luz CLP + Sensor Ventana)</option>
+            <option value="ninguno">No agregar Kit Smart por ahora</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tu Comuna o Ciudad:</label>
+          <input type="text" id="cotComuna" class="form-control" placeholder="Ej: Ñuñoa, Las Condes, Maipú, Viña..." oninput="actualizarCotizacion()" />
+        </div>
+
+        <div class="result-banner" style="background:#eff6ff; border-color:#bfdbfe;">
+          <div style="font-size:0.85rem; color:#1e40af; font-weight:700;">VALOR TOTAL CERRADO (SIN COBROS OCULTOS):</div>
+          <div id="cotTotalDisplay" style="font-size:2rem; font-weight:800; color:#0d47a1;">$89.990</div>
+          <div id="cotDetalleDisplay" style="font-size:0.85rem; color:#475569; margin-bottom:12px;"></div>
+          <a id="btnEnviarCotizacionWA" href="#" target="_blank" class="btn-primary" style="width:100%; justify-content:center;">
+            📲 Agendar este Presupuesto por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 5: TABLA COMPARATIVA CHILE -->
+  <section id="comparativa">
+    <div class="section-header">
+      <h2>¿Por Qué Somos Mejores que la Competencia en Chile?</h2>
+      <p>Compara nuestro estándar frente a los técnicos informales y las empresas tradicionales.</p>
+    </div>
+
+    <div class="table-responsive">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Lo que importa en tu casa</th>
+            <th>Técnico Informal</th>
+            <th>Empresas Tradicionales</th>
+            <th class="highlight">❄️ ClimaSmart Chile</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Tipo de Limpieza</strong></td>
+            <td>Solo pasa un paño y limpia el filtro plástico ($35.000)</td>
+            <td>Limpieza básica sin desmontar ni usar vapor ($65.000+)</td>
+            <td class="highlight">Hidro-lavado a presión con carpa impermeable + vapor médico ($59.990)</td>
+          </tr>
+          <tr>
+            <td><strong>Aires Antiguos sin Wi-Fi</strong></td>
+            <td>No sabe cómo actualizarlos</td>
+            <td>Te dicen que compres un aire nuevo de $500.000+</td>
+            <td class="highlight">Lo volvemos Smart Wi-Fi + Alexa en 20 minutos desde $19.990</td>
+          </tr>
+          <tr>
+            <td><strong>Trato y Explicación</strong></td>
+            <td>Jerga técnica y cobros extra en terreno</td>
+            <td>Presupuestos confusos con letra chica</td>
+            <td class="highlight">Precio fijo online + Reporte Semáforo con fotos Antes y Después</td>
+          </tr>
+          <tr>
+            <td><strong>Cuidado de tu Hogar</strong></td>
+            <td>Deja polvo al perforar y goteras en el muro</td>
+            <td>Estándar variable según contratista</td>
+            <td class="highlight">Taladro con aspiradora Cero Polvo + Garantía 6 meses Cero Goteo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p style="font-weight:700; color:white; font-size:1.1rem; margin-bottom:0.5rem;">❄️ ClimaSmart Chile — Climatización Transparente e Inteligente</p>
+    <p>Instalación Certificada • Spa del Aire con Hidro-Lavado • Automatización Smart Wi-Fi para Aires Antiguos</p>
+    <p style="margin-top:1rem; font-size:0.85rem;">© 2026 ClimaSmart Chile. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- BOTÓN FLOTANTE WHATSAPP -->
+  <a href="https://wa.me/56912345678?text=%C2%A1Hola%20ClimaSmart%20Chile!%20Quiero%20consultar%20por%20mantenci%C3%B3n%20o%20volver%20Smart%20mi%20aire%20acondicionado." target="_blank" class="whatsapp-float">
+    💬 Hablar con un Asesor
+  </a>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
