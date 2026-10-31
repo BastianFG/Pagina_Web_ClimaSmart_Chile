@@ -703,7 +703,8 @@ section {
   box-shadow: var(--shadow);
 }
 
-.comp-table th, .comp-table td {
+.comp-table th,
+.comp-table td {
   padding: 1.1rem 1.2rem;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
@@ -868,21 +869,30 @@ footer {
 }
 
 @media (max-width: 960px) {
-  .hero, .calc-wrapper, .diagnostico-box {
+
+  .hero,
+  .calc-wrapper,
+  .diagnostico-box {
     grid-template-columns: 1fr;
   }
+
   .hero {
     text-align: center;
   }
+
   .hero p {
     margin: 0 auto 1.8rem;
   }
-  .hero-buttons, .hero-trust-badges {
+
+  .hero-buttons,
+  .hero-trust-badges {
     justify-content: center;
   }
+
   .mobile-menu-btn {
     display: inline-block;
   }
+
   .nav-links {
     display: none;
     position: absolute;
@@ -895,10 +905,14 @@ footer {
     border-bottom: 2px solid #cbd5e1;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
   }
+
   .nav-links.active {
     display: flex;
   }
-  .form-grid-2, .form-grid-3, .cot-action-buttons {
+
+  .form-grid-2,
+  .form-grid-3,
+  .cot-action-buttons {
     grid-template-columns: 1fr;
   }
 }
