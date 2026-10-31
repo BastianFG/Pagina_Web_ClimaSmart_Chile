@@ -8,17 +8,32 @@
 </head>
 <body>
 
+  <!-- NOTIFICACIÓN TOAST FLOTANTE -->
+  <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
+
   <!-- NAVBAR -->
   <nav class="navbar">
     <a href="#" class="logo">❄️ Clima<span>Smart</span> Chile</a>
-    <ul class="nav-links">
-      <li><a href="#sin-tecnicismos">En Simple</a></li>
-      <li><a href="#servicios">Servicios y Packs</a></li>
-      <li><a href="#aire-antiguo-smart">Vuelve Smart tu Aire Antiguo</a></li>
-      <li><a href="#calculadoras">Cotizador Online</a></li>
-      <li><a href="#comparativa">Por qué elegirnos</a></li>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
+      ☰
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#sin-tecnicismos" onclick="closeMobileMenu()">En Simple</a></li>
+      <li><a href="#diagnostico" onclick="closeMobileMenu()">Semáforo de Salud</a></li>
+      <li><a href="#aire-antiguo-smart" onclick="closeMobileMenu()">Aire Antiguo a Smart</a></li>
+      <li><a href="#servicios" onclick="closeMobileMenu()">Servicios y Packs</a></li>
+      <li><a href="#calculadoras" onclick="closeMobileMenu()">Cotizador y Agenda</a></li>
+      <li><a href="#faq" onclick="closeMobileMenu()">Preguntas</a></li>
     </ul>
-    <a href="#calculadoras" class="btn-nav">Cotizar en 30 seg</a>
+
+    <div class="nav-actions">
+      <button class="btn-reservas-nav" onclick="abrirModalReservas()">
+        📋 Mis Reservas <span id="badgeReservasCount" class="badge-count">0</span>
+      </button>
+      <a href="#calculadoras" class="btn-nav">Cotizar en 30 seg</a>
+    </div>
   </nav>
 
   <!-- HERO SECTION CON SIMULADOR INTERACTIVO -->
@@ -32,8 +47,15 @@
         <strong>aire acondicionado antiguo en Smart Wi-Fi en 20 minutos</strong> sin cambiarlo.
       </p>
       <div class="hero-buttons">
-        <a href="#calculadoras" class="btn-primary">⚡ Cotizar Mi Servicio Ahora</a>
+        <a href="#calculadoras" class="btn-primary">⚡ Cotizar y Agendar Ahora</a>
         <a href="#aire-antiguo-smart" class="btn-secondary">📱 ¿Tienes un Aire Antiguo sin Wi-Fi?</a>
+        <a href="#diagnostico" class="btn-secondary">🚦 Test de Salud de tu Aire</a>
+      </div>
+
+      <div class="hero-trust-badges">
+        <span>⭐ 4.9/5 Clientes en Chile</span>
+        <span>🛡️ 6 Meses de Garantía Escrita</span>
+        <span>💳 Webpay / Transferencia</span>
       </div>
     </div>
 
@@ -41,26 +63,41 @@
     <div>
       <div class="phone-mockup">
         <div class="phone-header">
-          <span>App ClimaSmart Wi-Fi</span>
+          <span>📱 App ClimaSmart Wi-Fi</span>
+          <span id="phoneRoomTemp">🏠 Pieza: 24°C • 48% Hum</span>
           <span>🔋 98%</span>
         </div>
+
         <div id="acScreen" class="ac-screen">
           <div style="font-size:0.8rem; opacity:0.9;">Aire Antiguo Modernizado (Living)</div>
           <div id="acTemp" class="ac-temp-display">21 °C</div>
           <div id="acMode" style="font-weight:700; margin-bottom:4px;">Modo: Frío ❄️</div>
-          <div id="acStatus" style="font-size:0.78rem; background:rgba(0,0,0,0.25); padding:4px 8px; border-radius:99px;">
+          <div id="acStatus" class="ac-status-pill">
             ⚡ Ahorro Nocturno Activo (-30% Luz)
           </div>
+          <div class="ac-meter-box">
+            <div>Consumo en vivo: <strong id="acCostHour">$95 CLP/h</strong></div>
+            <div>Ahorro estimado: <strong id="acMonthlySavings" style="color:#86efac;">-$14.500 CLP/mes</strong></div>
+          </div>
         </div>
+
+        <div id="voiceFeedback" class="voice-feedback" style="display:none;"></div>
+
         <div style="font-size:0.78rem; text-align:center; color:#cbd5e1; margin-bottom:8px;">
-          👇 ¡Pruébalo! Así manejarás tu aire antiguo desde el celular:
+          👇 ¡Pruébalo en vivo! Así manejarás tu aire antiguo desde el celular:
         </div>
+
         <div class="ac-controls">
           <button class="ac-btn" onclick="changeTemp(-1)">- Bajar T°</button>
           <button id="btnPower" class="ac-btn power active" onclick="togglePower()">Apagar</button>
           <button class="ac-btn" onclick="changeTemp(1)">+ Subir T°</button>
         </div>
-        <button class="ac-btn" style="width:100%;" onclick="toggleMode()">🔄 Cambiar Frío / Calor</button>
+
+        <div class="ac-controls-secondary">
+          <button class="ac-btn" onclick="toggleMode()">🔄 Modo Clima</button>
+          <button id="btnSaving" class="ac-btn active-feature" onclick="toggleSaving()">⚡ Ahorro Luz</button>
+          <button class="ac-btn voice-btn" onclick="simulateVoiceCommand()">🎙️ Probar Alexa / Voz</button>
+        </div>
       </div>
     </div>
   </header>
@@ -93,10 +130,53 @@
     </div>
   </section>
 
+  <!-- SECCIÓN INTERACTIVA NUEVA: SEMÁFORO DE SALUD DEL AIRE -->
+  <section id="diagnostico" style="background:#f8fafc; border-top:1px solid #e2e8f0; border-bottom:1px solid #e2e8f0;">
+    <div class="section-header">
+      <span class="pill-tag" style="background:#0f172a; color:white;">DIAGNÓSTICO INTERACTIVO EN 15 SEGUNDOS</span>
+      <h2 style="margin-top:10px;">🚦 Semáforo de Salud de tu Aire Acondicionado</h2>
+      <p>Responde estas 3 preguntas rápidas para saber en qué estado está tu equipo, cuánta luz extra está gastando y qué servicio necesitas.</p>
+    </div>
+
+    <div class="diagnostico-box">
+      <div class="diag-questions">
+        <div class="form-group">
+          <label>1. ¿Hace cuánto tiempo no se le hace un lavado profundo con carpa?</label>
+          <select id="diagTiempo" class="form-control" onchange="evaluarSemaforo()">
+            <option value="0">Menos de 6 meses</option>
+            <option value="1" selected>Entre 6 meses y 1 año</option>
+            <option value="2">Más de 1 año (o nunca se ha hecho)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>2. ¿Qué notas al encender tu aire acondicionado?</label>
+          <select id="diagSintoma" class="form-control" onchange="evaluarSemaforo()">
+            <option value="0">Funciona silencioso y sin olores</option>
+            <option value="1" selected>Demora más en enfriar/calentar o tira menos viento</option>
+            <option value="2">Sale olor a humedad/polvo, gotea agua o da alergia</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>3. ¿Tu aire actual tiene control desde el celular (Wi-Fi)?</label>
+          <select id="diagSmart" class="form-control" onchange="evaluarSemaforo()">
+            <option value="no" selected>No, solo usa el control remoto tradicional (a veces queda prendido)</option>
+            <option value="si">Sí, ya lo manejo desde el celular</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="diagResultado" class="diag-result-panel">
+        <!-- Se llena dinámicamente por JS -->
+      </div>
+    </div>
+  </section>
+
   <!-- SECCIÓN 2: APARTADO ESTRELLA - VUELVE INTELIGENTE TU AIRE ANTIGUO -->
   <section id="aire-antiguo-smart" style="background:#e0f2f1;">
     <div class="section-header">
-      <span style="background:#00695c; color:white; padding:4px 12px; border-radius:99px; font-size:0.85rem; font-weight:700;">SERVICIO EXCLUSIVO EN CHILE</span>
+      <span class="pill-tag" style="background:#00695c; color:white;">SERVICIO EXCLUSIVO EN CHILE</span>
       <h2 style="margin-top:10px;">¿Tu Aire Acondicionado es Antiguo? ¡No lo cambies, vuélvelo Smart!</h2>
       <p>Si tu aire actual enfría y calienta bien con su control remoto normal, en <strong>20 minutos y sin romper ni desarmar nada</strong> lo dejamos conectado al Wi-Fi de tu casa.</p>
     </div>
@@ -114,7 +194,9 @@
             <li>✔️ <strong>Compatible con el 99% de marcas en Chile:</strong> Anwo, Kendal, Midea, Clark, LG, Samsung, Khöne, etc.</li>
           </ul>
         </div>
-        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Elegir Smart Básico</a>
+        <button type="button" class="btn-primary" style="justify-content:center; width:100%;" onclick="seleccionarPlan('solo_smart', 'basico', 'Plan Smart Básico')">
+          ⚡ Elegir Smart Básico
+        </button>
       </div>
 
       <!-- Plan Smart 2 -->
@@ -130,7 +212,9 @@
             <li>✔️ <strong>Modo Sueño y Mascota Segura:</strong> Se apaga solo a las 3:00 AM o se enciende solo si tu departamento supera los 27°C en verano.</li>
           </ul>
         </div>
-        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Elegir Smart Clima Pro</a>
+        <button type="button" class="btn-primary" style="justify-content:center; width:100%;" onclick="seleccionarPlan('solo_smart', 'pro', 'Plan Smart Clima Pro')">
+          ⭐ Elegir Smart Clima Pro
+        </button>
       </div>
 
       <!-- Plan Smart 3 -->
@@ -145,7 +229,9 @@
             <li>✔️ <strong>Sensor Inteligente de Ventana Abierta:</strong> Si alguien abre la ventana más de 3 minutos, el aire se apaga solo para no botar plata.</li>
           </ul>
         </div>
-        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Elegir Ahorro Máximo</a>
+        <button type="button" class="btn-primary" style="justify-content:center; width:100%;" onclick="seleccionarPlan('solo_smart', 'ahorro', 'Plan Smart Ahorro Máximo')">
+          💰 Elegir Ahorro Máximo
+        </button>
       </div>
     </div>
   </section>
@@ -170,7 +256,9 @@
             <li>✔️ <strong>Destape de desagüe y chequeo eléctrico:</strong> Garantía Cero Goteo.</li>
           </ul>
         </div>
-        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Agendar Spa del Aire</a>
+        <button type="button" class="btn-primary" style="justify-content:center; width:100%;" onclick="seleccionarPlan('mantencion', 'ninguno', 'Mantención Spa del Aire')">
+          🚿 Agendar Spa del Aire
+        </button>
       </div>
 
       <div class="card popular">
@@ -186,7 +274,9 @@
             <li>✔️ <strong>Automatización "Llegando a Casa" y "Ahorro Nocturno" activadas.</strong></li>
           </ul>
         </div>
-        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Quiero el Pack Estrella</a>
+        <button type="button" class="btn-primary" style="justify-content:center; width:100%;" onclick="seleccionarPlan('mantencion', 'pro', 'Pack Renueva + Smart Pro')">
+          🚀 Quiero el Pack Estrella
+        </button>
       </div>
 
       <div class="card">
@@ -201,28 +291,31 @@
             <li>✔️ <strong>6 Meses de Garantía directa por escrito.</strong></li>
           </ul>
         </div>
-        <a href="#calculadoras" class="btn-primary" style="justify-content:center;">Agendar Instalación</a>
+        <button type="button" class="btn-primary" style="justify-content:center; width:100%;" onclick="seleccionarPlan('instalacion_9_12', 'ninguno', 'Instalación Certificada Cero Polvo')">
+          🛠️ Agendar Instalación
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- SECCIÓN 4: CALCULADORAS INTERACTIVAS (BTU + COTIZADOR WHATSAPP) -->
+  <!-- SECCIÓN 4: CALCULADORAS INTERACTIVAS (BTU + COTIZADOR Y AGENDA ONLINE) -->
   <section id="calculadoras" style="background:#f1f5f9;">
     <div class="section-header">
-      <h2>Herramientas Interactivas para el Cliente</h2>
-      <p>Calcula qué capacidad necesita tu pieza sin tecnicismos o arma tu presupuesto exacto en segundos.</p>
+      <h2>Cotizador Online y Agenda Instantánea</h2>
+      <p>Calcula qué capacidad necesita tu pieza sin tecnicismos, arma tu presupuesto cerrado y reserva tu visita en línea o por WhatsApp.</p>
     </div>
 
     <div class="calc-wrapper">
-      <!-- Calculadora 1: BTU en Simple -->
+      <!-- Calculadora 1: BTU en Simple + Simulador de Ahorro -->
       <div class="calc-box">
         <h3 style="margin-bottom:0.5rem;">📏 1. ¿Qué Aire Necesito? (Calculadora Simple)</h3>
         <p style="font-size:0.9rem; color:var(--gray-text); margin-bottom:1.2rem;">No necesitas saber qué es un BTU. Dinos cómo es tu pieza y te recomendamos el equipo exacto.</p>
 
         <div class="form-group">
-          <label>Tamaño aproximado de la habitación (m²):</label>
-          <input type="number" id="inputM2" class="form-control" value="18" min="5" max="100" oninput="calcularBTU()" />
-          <small style="color:var(--gray-text);">Ej: Un dormitorio normal mide entre 12 y 18 m². Un living mide entre 22 y 35 m².</small>
+          <label>Tamaño aproximado de la habitación: <strong id="labelM2" style="color:var(--primary);">18 m²</strong></label>
+          <input type="range" id="rangeM2" min="6" max="80" value="18" style="width:100%; margin-bottom:6px; accent-color:var(--primary);" oninput="syncM2(this.value)" />
+          <input type="number" id="inputM2" class="form-control" value="18" min="5" max="100" oninput="syncM2(this.value)" />
+          <small style="color:var(--gray-text);">Ej: Dormitorio normal: 12 a 18 m². Living-comedor: 22 a 38 m².</small>
         </div>
 
         <div class="form-group">
@@ -241,13 +334,25 @@
           </select>
         </div>
 
+        <div class="form-group">
+          <label>Horas de uso diario estimadas (para calcular ahorro Smart):</label>
+          <select id="selectHorasUso" class="form-control" onchange="calcularBTU()">
+            <option value="4">Uso moderado (4 horas al día)</option>
+            <option value="8" selected>Uso normal día/noche (8 horas al día)</option>
+            <option value="12">Uso intensivo verano/invierno (12+ horas al día)</option>
+          </select>
+        </div>
+
         <div id="resBTU" class="result-banner"></div>
       </div>
 
-      <!-- Calculadora 2: Cotizador Directo a WhatsApp -->
-      <div class="calc-box">
-        <h3 style="margin-bottom:0.5rem;">💬 2. Cotizador Instantáneo Sin Sorpresas</h3>
-        <p style="font-size:0.9rem; color:var(--gray-text); margin-bottom:1.2rem;">Arma tu servicio a medida y envíanos tu reserva lista por WhatsApp.</p>
+      <!-- Calculadora 2: Cotizador Directo + Reserva Online -->
+      <div class="calc-box" id="cotizadorBox">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:0.5rem;">
+          <h3>💬 2. Cotizador y Reserva Sin Sorpresas</h3>
+          <span id="cotBadgeSeleccion" class="badge-plan-activo">Precio Fijo Garantizado</span>
+        </div>
+        <p style="font-size:0.9rem; color:var(--gray-text); margin-bottom:1.2rem;">Arma tu servicio a medida, guarda tu reserva con código único o envíala directo por WhatsApp.</p>
 
         <div class="form-group">
           <label>¿Qué servicio necesitas?</label>
@@ -259,10 +364,14 @@
           </select>
         </div>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+        <div class="form-grid-2">
           <div class="form-group">
             <label>Cantidad de Equipos:</label>
-            <input type="number" id="cotCantidad" class="form-control" value="1" min="1" max="10" oninput="actualizarCotizacion()" />
+            <div class="qty-selector">
+              <button type="button" class="qty-btn" onclick="cambiarCantidadCotizador(-1)">−</button>
+              <input type="number" id="cotCantidad" class="form-control" value="1" min="1" max="15" oninput="actualizarCotizacion()" style="text-align:center; font-weight:700;" />
+              <button type="button" class="qty-btn" onclick="cambiarCantidadCotizador(1)">+</button>
+            </div>
           </div>
           <div class="form-group">
             <label>Marca de tu Aire:</label>
@@ -270,6 +379,7 @@
               <option value="Anwo / Kendal / Midea">Anwo / Kendal / Midea</option>
               <option value="Samsung / LG">Samsung / LG</option>
               <option value="Clark / Hisense / Khöne">Clark / Hisense / Khöne</option>
+              <option value="Daikin / Mitsubishi">Daikin / Mitsubishi</option>
               <option value="Otra Marca / No sé">Otra Marca / No estoy seguro</option>
             </select>
           </div>
@@ -285,18 +395,77 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label>Tu Comuna o Ciudad:</label>
-          <input type="text" id="cotComuna" class="form-control" placeholder="Ej: Ñuñoa, Las Condes, Maipú, Viña..." oninput="actualizarCotizacion()" />
+        <!-- Datos de Contacto y Agenda -->
+        <div class="agenda-fields-box">
+          <div style="font-weight:800; font-size:0.92rem; color:var(--primary); margin-bottom:0.8rem;">
+            📅 Datos para tu Reserva / Visita Técnica:
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Tu Nombre:</label>
+              <input type="text" id="cotNombre" class="form-control" placeholder="Ej: Carolina Muñoz" oninput="actualizarCotizacion()" />
+            </div>
+            <div class="form-group">
+              <label>Teléfono / WhatsApp:</label>
+              <input type="tel" id="cotTelefono" class="form-control" placeholder="Ej: +56 9 8765 4321" oninput="actualizarCotizacion()" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Comuna o Ciudad:</label>
+              <input type="text" id="cotComuna" class="form-control" placeholder="Ej: Ñuñoa, Las Condes, Maipú..." oninput="actualizarCotizacion()" />
+            </div>
+            <div class="form-group">
+              <label>Dirección (Opcional):</label>
+              <input type="text" id="cotDireccion" class="form-control" placeholder="Calle, número y depto" oninput="actualizarCotizacion()" />
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>Fecha Preferida:</label>
+              <input type="date" id="cotFecha" class="form-control" onchange="actualizarCotizacion()" />
+            </div>
+            <div class="form-group">
+              <label>Bloque Horario:</label>
+              <select id="cotHorario" class="form-control" onchange="actualizarCotizacion()">
+                <option value="Mañana (09:00 a 13:00)">Mañana (09:00 - 13:00)</option>
+                <option value="Tarde (14:00 a 18:30)">Tarde (14:00 - 18:30)</option>
+                <option value="Sábado Express (09:30 a 14:00)">Sábado (09:30 - 14:00)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Medio de Pago:</label>
+              <select id="cotPago" class="form-control" onchange="actualizarCotizacion()">
+                <option value="Transferencia al finalizar">Transferencia (al terminar)</option>
+                <option value="Tarjeta Crédito / Débito (Webpay)">Tarjeta Débito / Crédito</option>
+                <option value="Efectivo">Efectivo</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <div class="result-banner" style="background:#eff6ff; border-color:#bfdbfe;">
-          <div style="font-size:0.85rem; color:#1e40af; font-weight:700;">VALOR TOTAL CERRADO (SIN COBROS OCULTOS):</div>
-          <div id="cotTotalDisplay" style="font-size:2rem; font-weight:800; color:#0d47a1;">$89.990</div>
-          <div id="cotDetalleDisplay" style="font-size:0.85rem; color:#475569; margin-bottom:12px;"></div>
-          <a id="btnEnviarCotizacionWA" href="#" target="_blank" class="btn-primary" style="width:100%; justify-content:center;">
-            📲 Agendar este Presupuesto por WhatsApp
-          </a>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+            <span style="font-size:0.85rem; color:#1e40af; font-weight:700;">VALOR TOTAL CERRADO (IVA INCLUIDO):</span>
+            <span id="cotDescuentoTag" class="discount-pill" style="display:none;"></span>
+          </div>
+          <div id="cotTotalDisplay" style="font-size:2.2rem; font-weight:800; color:#0d47a1;">$89.990</div>
+          <div id="cotDetalleDisplay" style="font-size:0.88rem; color:#334155; margin-bottom:14px;"></div>
+
+          <div class="cot-action-buttons">
+            <button type="button" class="btn-primary btn-book-online" onclick="guardarReservaOnline()">
+              ✅ Confirmar Reserva Online
+            </button>
+            <a id="btnEnviarCotizacionWA" href="#" target="_blank" class="btn-primary btn-whatsapp-action">
+              📲 Enviar por WhatsApp
+            </a>
+          </div>
+          <button type="button" class="btn-print-quote" onclick="imprimirCotizacionActual()">
+            📄 Descargar / Imprimir Presupuesto Formal
+          </button>
         </div>
       </div>
     </div>
@@ -349,15 +518,103 @@
     </div>
   </section>
 
+  <!-- SECCIÓN 6: PREGUNTAS FRECUENTES INTERACTIVAS (FAQ) -->
+  <section id="faq" style="background:#f8fafc; border-top:1px solid #e2e8f0;">
+    <div class="section-header">
+      <h2>Preguntas Frecuentes (Sin Letra Chica)</h2>
+      <p>Haz clic en cada pregunta para ver cómo trabajamos.</p>
+    </div>
+
+    <div class="faq-container">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Cómo sé si mi aire acondicionado antiguo sirve para volverlo Smart Wi-Fi?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Si tu aire acondicionado tiene un control remoto inalámbrico normal (infrarrojo) y enciende bien, <strong>es 99% compatible</strong> sin importar el año ni la marca (Anwo, Kendal, Midea, Clark, Samsung, LG, Khöne, Hisense, Carrier, etc.). No hay que desarmar tu equipo ni tocar sus cables internos.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Ensucian la pared o el piso durante el "Spa del Aire" (Hidro-lavado)?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <strong>Cero gotas y cero manchas.</strong> Instalamos una carpa impermeable sellada alrededor de tu split interior que canaliza toda el agua sucia, hongos y barro negro directamente a un depósito cerrado. Tu muralla, piso flotante y muebles quedan intactos.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Cuándo se paga el servicio y qué medios de pago aceptan?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Pagas <strong>únicamente al finalizar el trabajo</strong>, una vez que compruebas que tu equipo quedó impecable, enfriando/calentando al 100% y conectado a tu celular. Aceptamos transferencia bancaria, tarjetas de débito/crédito (Webpay) y efectivo.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Qué cubre la Garantía Escrita de 6 Meses?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Cubre cualquier filtración o goteo de agua por desagüe, fugas en conexiones de cobre en instalaciones nuevas y configuración del sistema Smart Wi-Fi. Si ocurre cualquier inconveniente, volvemos sin costo adicional.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL DE CONFIRMACIÓN Y MIS RESERVAS -->
+  <div id="modalReservas" class="modal-overlay" style="display:none;" onclick="cerrarModalSiFondo(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitulo">📋 Mis Reservas y Presupuestos</h3>
+        <button class="modal-close" onclick="cerrarModalReservas()">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIGURACIÓN WHATSAPP EMPRESA -->
+  <div id="modalConfigWA" class="modal-overlay" style="display:none;" onclick="cerrarModalConfigSiFondo(event)">
+    <div class="modal-card" style="max-width:460px;">
+      <div class="modal-header">
+        <h3>⚙️ Configurar WhatsApp de Recepción</h3>
+        <button class="modal-close" onclick="cerrarModalConfigWA()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.9rem; color:var(--gray-text); margin-bottom:1rem;">
+          Ingresa el número de WhatsApp chileno donde recibirás todas las cotizaciones y reservas de la página (formato: <code>569XXXXXXXX</code>):
+        </p>
+        <div class="form-group">
+          <label>Número de WhatsApp (con código 569):</label>
+          <input type="text" id="inputConfigWA" class="form-control" placeholder="56912345678" />
+        </div>
+        <button class="btn-primary" style="width:100%; justify-content:center;" onclick="guardarConfigWA()">
+          💾 Guardar Número de WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <p style="font-weight:700; color:white; font-size:1.1rem; margin-bottom:0.5rem;">❄️ ClimaSmart Chile — Climatización Transparente e Inteligente</p>
     <p>Instalación Certificada • Spa del Aire con Hidro-Lavado • Automatización Smart Wi-Fi para Aires Antiguos</p>
-    <p style="margin-top:1rem; font-size:0.85rem;">© 2026 ClimaSmart Chile. Todos los derechos reservados.</p>
+    <div style="margin-top:1.2rem; display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; font-size:0.85rem;">
+      <button type="button" class="footer-link-btn" onclick="abrirModalReservas()">📋 Ver Reservas Guardadas</button>
+      <span>•</span>
+      <button type="button" class="footer-link-btn" onclick="abrirModalConfigWA()">⚙️ Configurar Teléfono WhatsApp (<span id="footerPhoneDisplay">+56 9 1234 5678</span>)</button>
+    </div>
+    <p style="margin-top:1rem; font-size:0.82rem;">© 2026 ClimaSmart Chile. Todos los derechos reservados.</p>
   </footer>
 
   <!-- BOTÓN FLOTANTE WHATSAPP -->
-  <a href="https://wa.me/56912345678?text=%C2%A1Hola%20ClimaSmart%20Chile!%20Quiero%20consultar%20por%20mantenci%C3%B3n%20o%20volver%20Smart%20mi%20aire%20acondicionado." target="_blank" class="whatsapp-float">
+  <a id="btnFloatingWA" href="https://wa.me/56912345678?text=%C2%A1Hola%20ClimaSmart%20Chile!%20Quiero%20consultar%20por%20mantenci%C3%B3n%20o%20volver%20Smart%20mi%20aire%20acondicionado." target="_blank" class="whatsapp-float">
     💬 Hablar con un Asesor
   </a>
 

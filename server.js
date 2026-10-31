@@ -5,6 +5,16 @@ const { exec } = require('child_process');
 
 const PORT = process.env.PORT || 3000;
 const ROOT_DIR = __dirname;
+const DATA_DIR = path.join(ROOT_DIR, 'data');
+const RESERVAS_FILE = path.join(DATA_DIR, 'reservas.json');
+
+// Asegurar carpeta y archivo de datos para reservas
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+if (!fs.existsSync(RESERVAS_FILE)) {
+  fs.writeFileSync(RESERVAS_FILE, JSON.stringify([], null, 2), 'utf8');
+}
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -19,12 +29,75 @@ const MIME_TYPES = {
   '.webp': 'image/webp'
 };
 
+function sendJSON(res, statusCode, payload) {
+  res.writeHead(statusCode, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store'
+  });
+  res.end(JSON.stringify(payload));
+}
+
 const server = http.createServer((req, res) => {
-  const safeUrl = req.url.split('?')[0];
-  const relativePath = safeUrl === '/' ? 'index.html' : safeUrl.replace(/^\/+/, '');
+  const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  const pathname = parsedUrl.pathname;
+
+  // API: Obtener reservas guardadas
+  if (pathname === '/api/reservas' && req.method === 'GET') {
+    try {
+      const raw = fs.readFileSync(RESERVAS_FILE, 'utf8');
+      const reservas = JSON.parse(raw || '[]');
+      return sendJSON(res, 200, { ok: true, reservas });
+    } catch (err) {
+      return sendJSON(res, 500, { ok: false, error: 'Error al leer reservas' });
+    }
+  }
+
+  // API: Crear nueva reserva / cotización
+  if (pathname === '/api/reservas' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+      if (body.length > 1e6) req.socket.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const raw = fs.readFileSync(RESERVAS_FILE, 'utf8');
+        const reservas = JSON.parse(raw || '[]');
+
+        const nuevaReserva = {
+          id: data.id || `CS-${Math.floor(100000 + Math.random() * 900000)}`,
+          fechaCreacion: new Date().toISOString(),
+          nombre: data.nombre || 'Cliente Web',
+          telefono: data.telefono || '',
+          comuna: data.comuna || '',
+          direccion: data.direccion || '',
+          fechaVisita: data.fechaVisita || '',
+          horario: data.horario || '',
+          servicio: data.servicio || '',
+          cantidad: Number(data.cantidad) || 1,
+          marca: data.marca || '',
+          kitSmart: data.kitSmart || '',
+          metodoPago: data.metodoPago || 'Por confirmar',
+          totalCLP: Number(data.totalCLP) || 0,
+          totalFormateado: data.totalFormateado || '',
+          estado: 'Confirmada / Pendiente de Visita'
+        };
+
+        reservas.unshift(nuevaReserva);
+        fs.writeFileSync(RESERVAS_FILE, JSON.stringify(reservas, null, 2), 'utf8');
+        return sendJSON(res, 201, { ok: true, reserva: nuevaReserva });
+      } catch (err) {
+        return sendJSON(res, 400, { ok: false, error: 'Datos de reserva inválidos' });
+      }
+    });
+    return;
+  }
+
+  // Archivos estáticos
+  const relativePath = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
   const filePath = path.join(ROOT_DIR, relativePath);
 
-  // Evitar acceso fuera del directorio raíz
   if (!filePath.startsWith(ROOT_DIR)) {
     res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('403 - Acceso denegado');
@@ -63,7 +136,7 @@ function startServer(port) {
   server.listen(port, () => {
     const url = `http://localhost:${port}`;
     console.log('===========================================================');
-    console.log('❄️  ClimaSmart Chile - Servidor Web Activo');
+    console.log('❄️  ClimaSmart Chile - Servidor Web + API Activo');
     console.log(`🌐 URL Local: ${url}`);
     console.log('🛑 Presiona Ctrl + C para detener el servidor');
     console.log('===========================================================');
@@ -77,4 +150,3 @@ function startServer(port) {
 }
 
 startServer(Number(PORT));
-
