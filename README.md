@@ -28,3 +28,4 @@ Sitio web 100% funcional para **ClimaSmart Chile**: Instalación Certificada Cer
   - Generador de comprobante y presupuesto formal imprimible / descargable en PDF.
   - Envío directo con mensaje estructurado a WhatsApp.
 - **⚙️ Configurador de WhatsApp Integrado**: Permite actualizar el número de WhatsApp receptor directamente desde el pie de página del sitio web.
+

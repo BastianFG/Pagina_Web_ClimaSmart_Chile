@@ -5,10 +5,14 @@
 
 const STORAGE_KEY_RESERVAS = 'climasmart_reservas_v1';
 const STORAGE_KEY_WA = 'climasmart_whatsapp_phone';
-const DEFAULT_WA_PHONE = '56912345678';
+const DEFAULT_WA_PHONE = '56964549918';
 
 function getWhatsAppNumber() {
-  return localStorage.getItem(STORAGE_KEY_WA) || DEFAULT_WA_PHONE;
+  const guardado = localStorage.getItem(STORAGE_KEY_WA);
+  if (!guardado || guardado === '56912345678') {
+    return DEFAULT_WA_PHONE;
+  }
+  return guardado;
 }
 
 function formatCLP(valor) {

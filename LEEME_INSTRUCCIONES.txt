@@ -19,6 +19,6 @@ INSTRUCCIONES PARA USAR Y PUBLICAR TU PÁGINA WEB - CLIMASMART CHILE
    - Calculadora Interactiva de BTU en Palabras Simples: El cliente ingresa los metros cuadrados de su pieza, el sol de la tarde y el tipo de habitación, y recibe la recomendación automática + precio de instalación.
    - Cotizador Online Automático con Envío a WhatsApp: Calcula descuentos por cantidad, suma el Pack Smart y genera el mensaje listo hacia tu número de WhatsApp.
 
-3. ¿CÓMO PONER TU NÚMERO DE WHATSAPP REAL?
-   - Abre los archivos "index.html" y "js/app.js" con el Bloc de Notas (o Visual Studio Code).
-   - Busca el número de ejemplo "56912345678" y reemplázalo por tu número de celular chileno (ej: 56987654321).
+3. NÚMERO DE WHATSAPP CONFIGURADO:
+   - El sitio ya tiene configurado como número oficial el +56964549918 (56964549918) en "index.html" y "js/app.js".
+   - También puedes cambiarlo desde el botón "Configurar Teléfono WhatsApp" en el pie de página de la web.
