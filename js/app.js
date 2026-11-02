@@ -48,8 +48,77 @@ function closeMobileMenu() {
 }
 
 // =========================================================================
-// 1. SIMULADOR DE CELULAR SMART WI-FI EN PORTADA
+// 1. SIMULADOR DE CELULAR SMART WI-FI EN PORTADA + SONIDO REAL DE CONTROL
 // =========================================================================
+const REMOTE_AUDIO_SRC = 'assets/audio/ac-beep.m4a';
+let audioCtx = null;
+let decodedBeepBuffer = null;
+let beepStartOffset = 0;
+
+// Precargar y decodificar el audio real (.m4a) para reproducción instantánea
+async function preloadRemoteSound() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    audioCtx = new AudioContextClass();
+    const res = await fetch(REMOTE_AUDIO_SRC);
+    if (!res.ok) return;
+    const arrayBuf = await res.arrayBuffer();
+    decodedBeepBuffer = await audioCtx.decodeAudioData(arrayBuf);
+
+    // Detectar el inicio exacto del sonido en la grabación para que suene sin retardo
+    const ch = decodedBeepBuffer.getChannelData(0);
+    for (let i = 0; i < ch.length; i++) {
+      if (Math.abs(ch[i]) > 0.035) {
+        beepStartOffset = Math.max(0, (i / decodedBeepBuffer.sampleRate) - 0.025);
+        break;
+      }
+    }
+  } catch (e) {
+    // Si se abre como archivo local (file://), usará el elemento <audio> directamente
+  }
+}
+
+function playRemoteBeep() {
+  // Opción 1: Reproducción de baja latencia del archivo real decodificado
+  if (audioCtx && decodedBeepBuffer) {
+    try {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const source = audioCtx.createBufferSource();
+      source.buffer = decodedBeepBuffer;
+      source.connect(audioCtx.destination);
+      source.start(0, beepStartOffset);
+      return;
+    } catch (e) {
+      // Continuar con fallback HTML5 Audio
+    }
+  }
+
+  // Opción 2: Reproducir el archivo assets/audio/ac-beep.m4a mediante HTML5 Audio
+  const baseAudio = document.getElementById('acBeepAudio');
+  const sound = baseAudio ? baseAudio.cloneNode(true) : new Audio(REMOTE_AUDIO_SRC);
+  sound.volume = 1.0;
+  sound.play().catch(() => {
+    // Opción 3: Respaldo sintetizado si el navegador no soporta .m4a
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      const ctx = audioCtx || new AudioContextClass();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(2650, ctx.currentTime);
+      gain.gain.setValueAtTime(0.22, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.14);
+    } catch (_) {}
+  });
+}
+
 const MODOS_CLIMA = ['Frío ❄️', 'Calor ☀️', 'Antihumedad 💧'];
 let modoIndex = 0;
 
@@ -139,11 +208,13 @@ function updatePhoneUI() {
 }
 
 function togglePower() {
+  playRemoteBeep();
   acState.power = !acState.power;
   updatePhoneUI();
 }
 
 function changeTemp(delta) {
+  playRemoteBeep();
   if (!acState.power) {
     acState.power = true;
   }
@@ -152,6 +223,7 @@ function changeTemp(delta) {
 }
 
 function toggleMode() {
+  playRemoteBeep();
   if (!acState.power) acState.power = true;
   modoIndex = (modoIndex + 1) % MODOS_CLIMA.length;
   acState.mode = MODOS_CLIMA[modoIndex];
@@ -159,6 +231,7 @@ function toggleMode() {
 }
 
 function toggleSaving() {
+  playRemoteBeep();
   if (!acState.power) acState.power = true;
   acState.saving = !acState.saving;
   updatePhoneUI();
@@ -166,6 +239,7 @@ function toggleSaving() {
 }
 
 function simulateVoiceCommand() {
+  playRemoteBeep();
   const cmd = COMANDOS_VOZ_EJEMPLO[voiceCmdIndex];
   voiceCmdIndex = (voiceCmdIndex + 1) % COMANDOS_VOZ_EJEMPLO.length;
 
@@ -844,6 +918,7 @@ window.addEventListener('DOMContentLoaded', () => {
     inputFecha.min = `${yyyy}-${mm}-${dd}`;
   }
 
+  preloadRemoteSound();
   updatePhoneUI();
   evaluarSemaforo();
   calcularBTU();
